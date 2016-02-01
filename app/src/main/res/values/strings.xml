@@ -1,0 +1,33 @@
+<resources>
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="title_devices">BLE Device Scan</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="unknown_device">Unknown device</string>
+
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+
+    <string name="app_name">HomeTrainer</string>
+    <string name="action_settings">Brustgurt auswählen</string>
+
+    <string name="edit_message">Enter a Message</string>
+    <string name="button_send">Send</string>
+    <string name="button_start_training">Starte Training</string>
+    <string name="view_belt_address_hint">The Address of the Belt</string>
+    <string name="view_belt_name_hint">The Name of the Belt</string>
+    <string name="label_aktueller_puls">Aktueller Puls:</string>
+    <string name="button_start_text">Training starten</string>
+    <string name="training_started_text">Das Training ist gestartet</string>
+    <string name="action_personal_settings_text">Persönliche Daten</string>
+    <string name="age_conversion_failed_text">Ungültige Altersangabe</string>
+    <string name="weight_validation_failure_text">Ungültigen Wert für das Gewicht eingegeben</string>
+</resources>
