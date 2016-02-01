@@ -193,6 +193,15 @@ public class DeviceScanActivity extends ListActivity {
         super.onPause();
         scanLeDevice(false);
         mLeDeviceListAdapter.clear();
+        final Intent goBack = new Intent(this, ChooseTraining.class);
+        goBack.putExtra(ChooseTraining.EXTRAS_DEVICE_NAME, "");
+        goBack.putExtra(ChooseTraining.EXTRAS_DEVICE_ADDRESS, "");
+
+        if (mScanning) {
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mScanning = false;
+        }
+        setResult(RESULT_OK, goBack);
     }
 
     @Override
@@ -296,6 +305,34 @@ public class DeviceScanActivity extends ListActivity {
 
             return view;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        final Intent goBack = new Intent(this, ChooseTraining.class);
+        goBack.putExtra(ChooseTraining.EXTRAS_DEVICE_NAME, "");
+        goBack.putExtra(ChooseTraining.EXTRAS_DEVICE_ADDRESS, "");
+
+        if (mScanning) {
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mScanning = false;
+        }
+        setResult(RESULT_OK, goBack);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        final Intent goBack = new Intent(this, ChooseTraining.class);
+        goBack.putExtra(ChooseTraining.EXTRAS_DEVICE_NAME, "");
+        goBack.putExtra(ChooseTraining.EXTRAS_DEVICE_ADDRESS, "");
+
+        if (mScanning) {
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mScanning = false;
+        }
+        setResult(RESULT_OK, goBack);
+        super.onDestroy();
     }
 
     // Device scan callback.
