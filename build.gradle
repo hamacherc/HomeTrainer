@@ -12,6 +12,8 @@ buildscript {
     }
 }
 
+// Here is an unnecessary comment that is only use to look, what git does.
+
 allprojects {
     repositories {
         jcenter()

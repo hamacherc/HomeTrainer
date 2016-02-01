@@ -33,7 +33,7 @@ public class PersonalSettingsActivity extends Activity {
     private int defaultColor;
     private boolean ageValid = false;
     private boolean weightValid = false;
-
+    private String Quatsch;
     private EditText edtName;
     private EditText edtFamiliyName;
     private EditText edtAge;
