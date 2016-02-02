@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -31,6 +33,18 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     private String mDeviceAddress;
     private BluetoothLeService mBluetoothLeService;
     private boolean mDeviceConnected;
+    private int weight;
+    private int height;
+    private int age;
+    private double maxHeartRate;
+    private int restingHeartRate;
+    private String name;
+    private String familyName;
+    private String gender = "male";
+    private boolean userDataAvailable;
+    final private double COUCH_POTATO = 0.5;
+    final private double MEDIUM_FIT = 0.6;
+    final private double TOPFIT = 0.7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +57,17 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         mDeviceAddress = chooseTrainingActivity.getExtras().getString(EXTRAS_DEVICE_ADDRESS);
 
         TextView txtDeviceName = (TextView) findViewById(R.id.used_belt_name);
+        TextView txvGreeting = (TextView) findViewById(R.id.txtGreetings_view);
+
+        SharedPreferences pref = this.getSharedPreferences("UserSettings", MODE_PRIVATE);
+        if (pref.contains("name")) {
+            userDataAvailable = PersonalSettingsActivity.loadSettings(pref);
+            if (userDataAvailable) {
+                String greetings = String.format(getString(R.string.greetings_text), PersonalSettingsActivity.name);
+                txvGreeting.setText(greetings);
+            }
+        }
+
         Button butStartTraining = (Button) findViewById(R.id.but_start);
         txtDeviceName.setText(mDeviceName);
 
@@ -166,4 +191,12 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
+    public void calculateMaxHR() {
+        if (PersonalSettingsActivity.gender == "male") {
+            maxHeartRate = 214 - 0.5 * age - 0.11 * weight;
+        } else {
+            maxHeartRate = 210 - 0.5 * age - 0.11 * weight;
+        }
+    }
+
 }

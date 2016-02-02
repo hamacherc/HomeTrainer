@@ -220,6 +220,7 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/rgb_fitnesslevel"
             android:checkedButton="@+id/rb_couchpotatoe">
             <RadioButton
                 android:layout_width="wrap_content"
@@ -231,32 +232,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/rb_mediumfit"
                 android:text="Mittelmäßig" />
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/rb_topfit"
                 android:text="Topfit"/>
         </RadioGroup>
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin = "10dp"
-        android:text="errechneter Maximalpuls"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="18sp"
-        android:layout_margin="5dp"
-        android:id="@+id/max_pulse_text"
-        android:text="000"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Fertig"
+        android:text="Speichern"
         android:onClick="onClickReady"/>
 </LinearLayout>

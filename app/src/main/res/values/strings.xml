@@ -30,4 +30,7 @@
     <string name="action_personal_settings_text">Persönliche Daten</string>
     <string name="age_conversion_failed_text">Ungültige Altersangabe</string>
     <string name="weight_validation_failure_text">Ungültigen Wert für das Gewicht eingegeben</string>
+    <string name="pref_usersettings_key">UserSettings</string>
+    <string name="toast_invalid_values_text">Bitte nochmal die eingegebenen Werte prüfem.</string>
+    <string name="greetings_text">Hallo %s!</string>
 </resources>
