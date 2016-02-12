@@ -9,16 +9,8 @@
     <string name="title_devices">BLE Device Scan</string>
     <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
     <string name="unknown_device">Unknown device</string>
-
-    <!-- Menu items -->
-    <string name="menu_connect">Connect</string>
-    <string name="menu_disconnect">Disconnect</string>
-    <string name="menu_scan">Scan</string>
-    <string name="menu_stop">Stop</string>
-
     <string name="app_name">HomeTrainer</string>
     <string name="action_settings">Brustgurt auswählen</string>
-
     <string name="edit_message">Enter a Message</string>
     <string name="button_send">Send</string>
     <string name="button_start_training">Starte Training</string>
@@ -33,4 +25,21 @@
     <string name="pref_usersettings_key">UserSettings</string>
     <string name="toast_invalid_values_text">Bitte nochmal die eingegebenen Werte prüfem.</string>
     <string name="greetings_text">Hallo %s!</string>
+
+
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+    <string name="used_hrbelt_text">Verwendeter Pulsmesser:</string>
+    <string name="your_training_areas_text">Deine Trainingsbereiche</string>
+    <string name="label_rekom_text">Regenerationsbereich (REKOM):</string>
+    <string name="label_ga1_text">Grundlagenausdauer 1 (GA1) :</string>
+    <string name="label_ga2_text">Grundlagenausdauer 2 (GA2) :</string>
+    <string name="label_EB_text">Entwicklungsbereich (EB) :</string>
+    <string name="label_sb_text">Spitzenbereich (SB) :</string>
+    <string name="readygo_text">Und Los!</string>
+
+
 </resources>

@@ -24,11 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".TrainingActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:screenOrientation="landscape"/>
         <activity android:name=".DeviceScanActivity"/>
         <activity android:name=".PersonalSettingsActivity"/>
-        <activity android:name=".TrainingActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="landscape"/>
         <service android:name=".BluetoothLeService" android:enabled="true"/>
 
 

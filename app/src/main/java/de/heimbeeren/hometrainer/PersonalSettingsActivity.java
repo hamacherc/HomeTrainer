@@ -11,11 +11,17 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+/* Diese Activity fragt die persönlichen Werte ab und speichert sie im
+Shared Preferences Store ab. Später sollen diese Werte mal in der Heimbeeren-Cloud gespeichert
+werden.
+ */
+
 public class PersonalSettingsActivity extends Activity {
     public static int weight = 60;
     public static int height = 165;
     public static int age = 35;
     public static int restingHeartRate = 60;
+    public static double maxHeartRate;
     public static String name;
     public static String familyName;
     public static String gender = "male";
@@ -41,16 +47,18 @@ public class PersonalSettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_settings);
+        // Erstmal unsere ganzen Views in der Activity in Variabeln referenzieren.
         initializeViews();
         SharedPreferences pref = this.getSharedPreferences("UserSettings", Context.MODE_PRIVATE);
         if (pref.contains("name")) {
-            loadSettings(pref);
-            displaySettings();
+            loadSettings(pref); // Einstellungen laden, wenn vorhanden.
+            displaySettings(); // und anzeigen.
         }
     }
 
 
     public static boolean loadSettings(SharedPreferences pref) {
+        // Werte aus dem Shared Preferences Store auslesen und in den Variabeln ablegen.
         try {
             weight = pref.getInt("weight", 60);
             height = pref.getInt("height", 165);
@@ -67,7 +75,7 @@ public class PersonalSettingsActivity extends Activity {
         }
     }
 
-    private void displaySettings() {
+    private void displaySettings() { // Einstellungen aus den Variabeln in die Views übertragen.
         edtWeight.setText(Integer.toString(weight));
         edtHeight.setText(Integer.toString(height));
         edtAge.setText(Integer.toString(age));
@@ -91,7 +99,7 @@ public class PersonalSettingsActivity extends Activity {
         }
     }
 
-    private void saveSettings() {
+    private void saveSettings() { // Shared Preferences Store öffnen und Werte abspeichern.
         SharedPreferences pref = getSharedPreferences("UserSettings", 0);
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt("weight",weight);
@@ -105,17 +113,21 @@ public class PersonalSettingsActivity extends Activity {
         editor.apply();
     }
     public void onClickReady(View view) {
-        if(checkValues()) {
+        if(checkValues()) { // Werte auf Gültigkeit überprüfen.
             name = edtName.getText().toString();
             familyName = edtFamiliyName.getText().toString();
-            checkValues();
-            checkFitnessLevel();
-            saveSettings();
+            // checkValues(); // Werte auf Gültigkeit überprüfen (redundanter Funktionsaufruf?)
+            checkGender(); // Geschlecht in Variable übertragen
+            checkFitnessLevel(); // Fitnesslevel-Konstante speichern.
+            calculateHR(); // Maximalpuls ausrechnen.
+            saveSettings(); // Alle Werte in den Shared Preferences Speicher schieben.
         } else {
+            // Warnmeldung ausgeben und nicht die Activity beenden.
             Toast.makeText(this, R.string.toast_invalid_values_text, Toast.LENGTH_SHORT).show();
             return;
         }
-
+        // Wenn alles gut ist, beenden wir jetzt die Activity, gehen wieder zurück zur aufrufenden
+        // Activity (das Hauptmenü) und übergeben ihr die erfolgreiche Einstellungseingabe
         Intent backToMain = new Intent(this, ChooseTraining.class);
         backToMain.putExtra("DATA_PRESENT", true);
         setResult(RESULT_OK, backToMain);
@@ -123,6 +135,8 @@ public class PersonalSettingsActivity extends Activity {
     }
 
     public void checkFitnessLevel() {
+        // Radiobutton Group für den Fitnesslevel auswerten und die passende Konstanten in einer
+        // Variable speichern. Wird später möglicherweise beim Training gebraucht.
         switch(rgbFitness.getCheckedRadioButtonId()) {
             case R.id.rb_couchpotatoe:
                 fitnesslevel = COUCH_POTATO;
@@ -137,7 +151,10 @@ public class PersonalSettingsActivity extends Activity {
     }
 
     public boolean checkValues() {
+        // Um Logikfehler zu vermeiden werden alle eingegebenen Werte auf Brauchbarkeit geprüft.
+        // Alle nicht brauchbaren Werte werden rot markiert, damit der User vernünftige Werte angibt.
         try {
+            // Überprüfen der eingegebenen Körpergröße
             height = Integer.parseInt(edtHeight.getText().toString());
             edtHeight.setBackgroundColor(defaultColor);
             if (height < 100 || height > 250) {
@@ -151,6 +168,7 @@ public class PersonalSettingsActivity extends Activity {
             heightValid = false;
         }
         try {
+            // Überprüfen des eingegebenen Ruhpuls-Wertes.
             restingHeartRate = Integer.parseInt(edtRestHR.getText().toString());
             edtRestHR.setBackgroundColor(defaultColor);
             if (restingHeartRate < 30 || restingHeartRate > 100) {
@@ -164,6 +182,7 @@ public class PersonalSettingsActivity extends Activity {
             restingHeartRateValid = false;
         }
         try {
+            // Überprüfen des eingegebenen Gewichtes
             weight = Integer.parseInt(edtWeight.getText().toString());
             edtWeight.setBackgroundColor(defaultColor);
             if (weight < 20 || weight > 150) {
@@ -177,6 +196,7 @@ public class PersonalSettingsActivity extends Activity {
             weightValid = false;
         }
         try {
+            // Überprüfen des eingegebenen Alters.
             age = Integer.parseInt(edtAge.getText().toString());
             edtAge.setBackgroundColor(defaultColor);
             if (age < 5 || age > 110) {
@@ -189,6 +209,7 @@ public class PersonalSettingsActivity extends Activity {
             edtAge.setBackgroundColor(Color.RED);
             ageValid = false;
         }
+        // Alle Ergebnisse überprüfen und daraufhin den Rückgabewert festlegen.
         if (ageValid && heightValid && weightValid & restingHeartRateValid) {
             return true;
         } else {
@@ -198,6 +219,7 @@ public class PersonalSettingsActivity extends Activity {
 
     @Override
     protected void onPause() {
+        // Activity wurde pausiert. Auch hier: Rückgabewerte setzen.
         Intent backToMain = new Intent(this, ChooseTraining.class);
         backToMain.putExtra("DATA_PRESENT", true);
         setResult(RESULT_OK, backToMain);
@@ -206,14 +228,29 @@ public class PersonalSettingsActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        // Unsere Activity ist irgendwie zerstört worden?
+        // Noch schnell den korrekten Rückgabewert speichern. (Funktion ist eigentlich redundant)
         Intent backToMain = new Intent(this, ChooseTraining.class);
         backToMain.putExtra("DATA_PRESENT", true);
         setResult(RESULT_OK, backToMain);
         super.onDestroy();
     }
 
+    public void checkGender() {
+        // Radiobuttons für das Geschlecht auswerten und in Variable speichern.
+        switch(rgbGender.getCheckedRadioButtonId()) {
+            case R.id.rb_male:
+                gender = "male";
+                break;
+            case R.id.rb_female:
+                gender = "female";
+                break;
+        }
+    }
     @Override
     public void onBackPressed() {
+        // Hat einer auf Zurück gedrückt?
+        // Dafür sorgen, dass die Rückgabewerte dann auch generiert werden.
         Intent backToMain = new Intent(this, ChooseTraining.class);
         backToMain.putExtra("DATA_PRESENT", true);
         setResult(RESULT_OK, backToMain);
@@ -221,6 +258,7 @@ public class PersonalSettingsActivity extends Activity {
     }
 
     private void initializeViews() {
+        // Erstmal unsere ganzen Views in der Activity in Variabeln referenzieren.
         edtName = (EditText) findViewById(R.id.prename_edit_text);
         edtFamiliyName = (EditText) findViewById(R.id.surname_edit_text);
         edtAge = (EditText) findViewById(R.id.age_edit_text);
@@ -230,5 +268,16 @@ public class PersonalSettingsActivity extends Activity {
         rgbGender = (RadioGroup) findViewById(R.id.rg_gender);
         defaultColor = edtWeight.getDrawingCacheBackgroundColor();
         rgbFitness = (RadioGroup) findViewById(R.id.rgb_fitnesslevel);
+
+    }
+
+    public static void calculateHR() {
+        // Je nach Geschlecht die Maximal-Herzfrequenz ausrechnen. Diese wird benötigt, um alle
+        // Trainingsbereiche zu berechnen.
+        if (gender.equals("male")) {
+            maxHeartRate = 214 - 0.5 * age - 0.11 * weight;
+        } else {
+            maxHeartRate = 210 - 0.5 * age - 0.11 * weight;
+        }
     }
 }
