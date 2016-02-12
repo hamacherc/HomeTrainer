@@ -16,12 +16,15 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.List;
 
 
@@ -32,26 +35,23 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     private final static String TAG = TrainingActivity.class.getSimpleName();
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    private String mDeviceName;
-    private String mDeviceAddress;
-    private BluetoothLeService mBluetoothLeService;
-    private boolean mDeviceConnected;
-    private int minRekomHR;
-    private int minGA1HR;
-    private int minGA2HR;
-    private int minEBHR;
-    private int minSBHR;
-    private double maxHeartRate;
-    private int actualHR;
-    private boolean userDataAvailable;
+    String mDeviceName, mDeviceAddress;
+    BluetoothLeService mBluetoothLeService;
+    boolean mDeviceConnected;
+    int minRekomHR, minGA1HR, minGA2HR, minEBHR, minSBHR, actualHR, minThreshold, maxThreshold;
+    double maxHeartRate;
+    boolean userDataAvailable,isManagedByHR;
     final private double COUCH_POTATO = 0.5;
     final private double MEDIUM_FIT = 0.6;
     final private double TOPFIT = 0.7;
-    private TextView mDataField;
-    private TextView txtDeviceName;
-    private TextView countdownTimerView;
-    private Button butStartTraining;
-    private Chronometer stopWatch;
+    final private int WORKOUT_GA1 = 1;
+    final private int WORKOUT_GA2 = 2;
+    final private int WORKOUT_TABLE = 3;
+    final private int WORKOUT_VIDEO = 4;
+    int workoutMode = WORKOUT_GA1;
+    TextView mDataField, txtDeviceName, countdownTimerView, txvMessage;
+    Button butStartTraining;
+    Chronometer stopWatch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +83,10 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         butStartTraining.setOnClickListener(this); // Listener für unseren Start-Button
 
         // Zeichensatz für unsere Stoppuhr festlegen (7-Digit-Anzeige)
-        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/Digital.ttf");
+        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/lcdmn.ttf");
         stopWatch.setTypeface(type);
 
+        isManagedByHR = false;
     }
 
     @Override
@@ -183,6 +184,11 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
             } else if (actualHR >= minSBHR) {
                 mDataField.setTextColor(Color.RED);
             } else mDataField.setTextColor(Color.WHITE);
+            if (actualHR < minThreshold && isManagedByHR) {
+                txvMessage.setText("Du musst mehr Gas geben!!! Mindestens " + minThreshold + "!!");
+            } else if (actualHR > maxThreshold && isManagedByHR)  {
+                txvMessage.setText("Mach Lockerer! Du strengst Dich zu sehr an!");
+            }
         }
     }
 
@@ -210,11 +216,7 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         switch(PushedButton.getId()) {
             case R.id.but_start:
                 PushedButton.setVisibility(View.GONE);
-                Chronometer chronometer = (Chronometer) findViewById(R.id.chronometer);
-                chronometer.setFormat("");
-                chronometer.setBase(100);
-                chronometer.setVisibility(View.VISIBLE);
-                chronometer.start();
+
                 CountDownTimer countdown = new CountDownTimer(10000, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -225,6 +227,7 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
                         countdownTimerView.setText(R.string.readygo_text);
                         Handler handler = new Handler();
                         handler.postDelayed(nextMove, 1500);
+                        startBiking();
                     }
                 };
                 countdown.start();
@@ -237,6 +240,7 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
             countdownTimerView.setVisibility(View.GONE);
         }
     };
+
 
     public void calculateHR() {
         // individuellen Trainingsbereiche festlegen.
@@ -256,6 +260,59 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         stopWatch = (Chronometer) findViewById(R.id.chronometer);
         countdownTimerView = (TextView) findViewById(R.id.countdown_timer_view);
         butStartTraining = (Button) findViewById(R.id.but_start);
+        txvMessage = (TextView) findViewById(R.id.text_Message);
+    }
+
+    protected void startBiking() {
+        stopWatch.setBase(SystemClock.elapsedRealtime());
+        stopWatch.start();
+         switch (workoutMode) {
+            case WORKOUT_GA1:
+                isManagedByHR = true;
+                minThreshold = minGA1HR;
+                maxThreshold = minGA2HR;
+                manageByHR();
+                break;
+            case WORKOUT_GA2:
+                isManagedByHR = true;
+                minThreshold = minGA2HR;
+                maxThreshold = minEBHR;
+                manageByHR();
+                break;
+            case WORKOUT_TABLE:
+                manageByTime();
+                break;
+            case WORKOUT_VIDEO:
+                manageByTerrain();
+                break;
+        }
+    }
+
+    protected void manageByHR() {
+        // Wir gehen zunächst mal davon aus, dass nach 40 Minuten das GA-Training endet.
+        stopWatch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                double endTimeMS = (2 * 1000 * 60);
+                double relaxTimeMS = (1 * 1000 * 60);
+                if (SystemClock.elapsedRealtime() - chronometer.getBase() > relaxTimeMS) {
+                    isManagedByHR = false;
+                    txvMessage.setText("Jetzt 5 Minuten locker ausradeln!");
+                } else if (SystemClock.elapsedRealtime() - chronometer.getBase() > endTimeMS) {
+                    isManagedByHR = false;
+                    stopWatch.stop();
+                    txvMessage.setText("Training beendet!");
+                }
+            }
+        });
+    }
+
+    protected void manageByTime() {
+
+    }
+
+    protected void manageByTerrain() {
+
     }
 
 }

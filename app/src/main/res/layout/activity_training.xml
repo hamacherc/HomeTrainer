@@ -22,9 +22,7 @@
         android:layout_height="wrap_content"
         android:textSize="50sp"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:id="@+id/countdown_timer_view"
-        />
-
+        android:id="@+id/countdown_timer_view" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,16 +43,24 @@
         android:id="@+id/used_belt_name"
         android:layout_gravity="right|bottom" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_margin="10dp"
+        android:id="@+id/text_Message"
+        android:layout_gravity="center" />
+
+
     <Chronometer
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/chronometer"
+        android:layout_gravity="center_horizontal|top"
         android:textSize="68sp"
+        android:textColor="#33691e"
         android:textStyle="italic"
-        android:visibility="visible"
-        android:layout_gravity="right|top" />
 
-
-
+         />
 </FrameLayout>
