@@ -293,8 +293,8 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         stopWatch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
-                double endTimeMS = (2 * 1000 * 60);
-                double relaxTimeMS = (1 * 1000 * 60);
+                double endTimeMS = (45 * 1000 * 60);
+                double relaxTimeMS = (5 * 1000 * 60);
                 if (SystemClock.elapsedRealtime() - chronometer.getBase() > relaxTimeMS) {
                     isManagedByHR = false;
                     txvMessage.setText("Jetzt 5 Minuten locker ausradeln!");

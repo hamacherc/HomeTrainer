@@ -60,7 +60,121 @@
         android:layout_gravity="center_horizontal|top"
         android:textSize="68sp"
         android:textColor="#33691e"
-        android:textStyle="italic"
+        android:textStyle="italic"/>
 
-         />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top">
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/imgFrontGear"
+            android:layout_gravity="left|top"
+            android:src="@drawable/vorne"/>
+
+        <TextView
+            android:id="@+id/txt_gear_front"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="39dp"
+            android:layout_marginTop="30dp"
+            android:textColor="#e0ef0c"
+            android:textSize="40sp"
+            android:text="3"
+            android:textStyle="italic"
+            android:gravity="left|top"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/imgFrontGear"
+            android:id="@+id/imgBackGear"
+            android:layout_gravity="left|top"
+            android:src="@drawable/hinten" />
+
+        <TextView
+            android:id="@+id/txt_gear_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="39dp"
+            android:layout_marginTop="30dp"
+            android:textColor="#e0ef0c"
+            android:textStyle="italic"
+            android:layout_toRightOf="@id/imgFrontGear"
+            android:textSize="40sp"
+            android:text="8"
+            android:gravity="left|top"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/imgSlope"
+            android:layout_gravity="left|top"
+            android:src="@drawable/vorne"/>
+
+        <TextView
+            android:id="@+id/txt_slope"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="35dp"
+            android:textColor="#e0ef0c"
+            android:textSize="35sp"
+            android:text="-2"
+            android:textStyle="italic"
+            android:gravity="left|top"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="115dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/imgSlope"
+            android:id="@+id/imgRPM"
+            android:layout_gravity="left|top"
+            android:src="@drawable/rpm" />
+
+        <TextView
+            android:id="@+id/txt_rpm_lower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="35dp"
+            android:textColor="#e0ef0c"
+            android:textStyle="italic"
+            android:text="60"
+            android:textAlignment="center"
+            android:layout_toRightOf="@id/imgSlope"
+            android:textSize="35sp"/>
+
+        <TextView
+            android:id="@+id/txt_rpm_upper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="75dp"
+            android:textColor="#e0ef0c"
+            android:textStyle="italic"
+            android:text="120"
+            android:textAlignment="center"
+            android:layout_toRightOf="@id/imgSlope"
+            android:textSize="35sp"/>
+    </RelativeLayout>
+
+
+
 </FrameLayout>
