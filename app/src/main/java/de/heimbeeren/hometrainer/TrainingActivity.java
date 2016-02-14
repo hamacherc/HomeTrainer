@@ -25,6 +25,8 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 
@@ -38,9 +40,10 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     String mDeviceName, mDeviceAddress;
     BluetoothLeService mBluetoothLeService;
     boolean mDeviceConnected;
-    int minRekomHR, minGA1HR, minGA2HR, minEBHR, minSBHR, actualHR, minThreshold, maxThreshold;
+    int minRekomHR, minGA1HR, minGA2HR, minEBHR, minSBHR, actualHR, minThreshold, maxThreshold,
+        lowerCadence, upperCadence, slope, frontGear, backGear;
     double maxHeartRate;
-    boolean userDataAvailable,isManagedByHR;
+    boolean userDataAvailable,isManagedByHR, cycling;
     final private double COUCH_POTATO = 0.5;
     final private double MEDIUM_FIT = 0.6;
     final private double TOPFIT = 0.7;
@@ -49,7 +52,8 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     final private int WORKOUT_TABLE = 3;
     final private int WORKOUT_VIDEO = 4;
     int workoutMode = WORKOUT_GA1;
-    TextView mDataField, txtDeviceName, countdownTimerView, txvMessage;
+    TextView mDataField, txtDeviceName, countdownTimerView, txvMessage, txvUpperCadence,
+            txvLowerCadence, txvSlope, txvFrontGear, txvBackGear;
     Button butStartTraining;
     Chronometer stopWatch;
 
@@ -185,9 +189,11 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
                 mDataField.setTextColor(Color.RED);
             } else mDataField.setTextColor(Color.WHITE);
             if (actualHR < minThreshold && isManagedByHR) {
-                txvMessage.setText("Du musst mehr Gas geben!!! Mindestens " + minThreshold + "!!");
+                txvMessage.setText("Du musst mehr Gas geben!!!\nPuls muss mindestens " + minThreshold + " sein!!");
             } else if (actualHR > maxThreshold && isManagedByHR)  {
-                txvMessage.setText("Mach Lockerer! Du strengst Dich zu sehr an!");
+                txvMessage.setText("Mach Lockerer!\nDu strengst Dich zu sehr an!");
+            } else if (isManagedByHR) {
+                txvMessage.setText("Super! Du bist in Deinem Traininsbereich!");
             }
         }
     }
@@ -261,11 +267,17 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         countdownTimerView = (TextView) findViewById(R.id.countdown_timer_view);
         butStartTraining = (Button) findViewById(R.id.but_start);
         txvMessage = (TextView) findViewById(R.id.text_Message);
+        txvBackGear = (TextView) findViewById(R.id.txt_gear_back);
+        txvFrontGear = (TextView) findViewById(R.id.txt_gear_front);
+        txvSlope = (TextView) findViewById(R.id.txt_slope);
+        txvLowerCadence = (TextView) findViewById(R.id.txt_rpm_lower);
+        txvUpperCadence = (TextView) findViewById(R.id.txt_rpm_upper);
     }
 
     protected void startBiking() {
         stopWatch.setBase(SystemClock.elapsedRealtime());
         stopWatch.start();
+        cycling = true;
          switch (workoutMode) {
             case WORKOUT_GA1:
                 isManagedByHR = true;
@@ -294,7 +306,13 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 double endTimeMS = (45 * 1000 * 60);
-                double relaxTimeMS = (5 * 1000 * 60);
+                double relaxTimeMS = (40 * 1000 * 60);
+                frontGear = 2;
+                backGear = 6;
+                lowerCadence = 90;
+                upperCadence = 100;
+                slope = 0;
+                showWorkoutData();
                 if (SystemClock.elapsedRealtime() - chronometer.getBase() > relaxTimeMS) {
                     isManagedByHR = false;
                     txvMessage.setText("Jetzt 5 Minuten locker ausradeln!");
@@ -313,6 +331,16 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
 
     protected void manageByTerrain() {
 
+    }
+
+    protected void showWorkoutData() {
+        if (cycling) {
+            txvLowerCadence.setText(Integer.toString(lowerCadence));
+            txvUpperCadence.setText(Integer.toString(upperCadence));
+            txvBackGear.setText(Integer.toString(backGear));
+            txvFrontGear.setText(Integer.toString(frontGear));
+            txvSlope.setText(Integer.toString(slope));
+        }
     }
 
 }
