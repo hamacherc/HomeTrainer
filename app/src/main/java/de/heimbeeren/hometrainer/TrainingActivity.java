@@ -31,7 +31,7 @@ import java.util.List;
 
 
 // Jetzt führen wir das Training durch.
-// Als erstes konzentrieren wir uns auf ein ganz einfaches Grundlagenausdauertraining.
+// Als erstes konzentrieren wir uns auf ein ganz einfaches Grundlagenausdauertraining 1.
 public class TrainingActivity extends Activity implements View.OnClickListener {
 
     private final static String TAG = TrainingActivity.class.getSimpleName();
@@ -267,6 +267,7 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         countdownTimerView = (TextView) findViewById(R.id.countdown_timer_view);
         butStartTraining = (Button) findViewById(R.id.but_start);
         txvMessage = (TextView) findViewById(R.id.text_Message);
+        txvMessage.setTextColor(Color.GREEN);
         txvBackGear = (TextView) findViewById(R.id.txt_gear_back);
         txvFrontGear = (TextView) findViewById(R.id.txt_gear_front);
         txvSlope = (TextView) findViewById(R.id.txt_slope);
@@ -342,5 +343,4 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
             txvSlope.setText(Integer.toString(slope));
         }
     }
-
 }

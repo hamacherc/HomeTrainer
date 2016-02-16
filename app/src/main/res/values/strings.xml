@@ -40,6 +40,8 @@
     <string name="label_EB_text">Entwicklungsbereich (EB) :</string>
     <string name="label_sb_text">Spitzenbereich (SB) :</string>
     <string name="readygo_text">Und Los!</string>
+    <string name="edit_text_prename">Vorname</string>
+    <string name="edit_text_familyname">Nachname</string>
 
 
 </resources>

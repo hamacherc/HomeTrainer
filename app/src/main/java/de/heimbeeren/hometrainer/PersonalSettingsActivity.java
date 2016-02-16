@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -36,10 +37,10 @@ public class PersonalSettingsActivity extends Activity {
     private boolean restingHeartRateValid = false;
     private EditText edtName;
     private EditText edtFamiliyName;
-    private EditText edtAge;
-    private EditText edtWeight;
-    private EditText edtHeight;
-    private EditText edtRestHR;
+    private NumberPicker nbpAge;
+    private NumberPicker nbpWeight;
+    private NumberPicker nbpHeight;
+    private NumberPicker nbpRestHR;
     private RadioGroup rgbGender;
     private RadioGroup rgbFitness;
 
@@ -76,11 +77,11 @@ public class PersonalSettingsActivity extends Activity {
     }
 
     private void displaySettings() { // Einstellungen aus den Variabeln in die Views übertragen.
-        edtWeight.setText(Integer.toString(weight));
-        edtHeight.setText(Integer.toString(height));
-        edtAge.setText(Integer.toString(age));
+        //nbpWeight.setText(Integer.toString(weight));
+        //nbpHeight.setText(Integer.toString(height));
+        //nbpAge.setText(Integer.toString(age));
         edtName.setText(name);
-        edtRestHR.setText(Integer.toString(restingHeartRate));
+        //nbpRestHR.setText(Integer.toString(restingHeartRate));
         edtFamiliyName.setText(familyName);
         switch(gender) {
             case "male":
@@ -155,58 +156,58 @@ public class PersonalSettingsActivity extends Activity {
         // Alle nicht brauchbaren Werte werden rot markiert, damit der User vernünftige Werte angibt.
         try {
             // Überprüfen der eingegebenen Körpergröße
-            height = Integer.parseInt(edtHeight.getText().toString());
-            edtHeight.setBackgroundColor(defaultColor);
+            // height = Integer.parseInt(nbpHeight.getText().toString());
+            nbpHeight.setBackgroundColor(defaultColor);
             if (height < 100 || height > 250) {
-                edtHeight.setBackgroundColor(Color.RED);
+                nbpHeight.setBackgroundColor(Color.RED);
                 heightValid = false;
             } else {
                 heightValid = true;
             }
         } catch (Exception whatHasHappened) {
-            edtHeight.setBackgroundColor(Color.RED);
+            nbpHeight.setBackgroundColor(Color.RED);
             heightValid = false;
         }
         try {
             // Überprüfen des eingegebenen Ruhpuls-Wertes.
-            restingHeartRate = Integer.parseInt(edtRestHR.getText().toString());
-            edtRestHR.setBackgroundColor(defaultColor);
+            // restingHeartRate = Integer.parseInt(nbpRestHR.getText().toString());
+            nbpRestHR.setBackgroundColor(defaultColor);
             if (restingHeartRate < 30 || restingHeartRate > 100) {
-                edtRestHR.setBackgroundColor(Color.RED);
+                nbpRestHR.setBackgroundColor(Color.RED);
                 restingHeartRateValid = false;
             } else {
                 restingHeartRateValid = true;
             }
         } catch (Exception whatHasHappened) {
-            edtRestHR.setBackgroundColor(Color.RED);
+            nbpRestHR.setBackgroundColor(Color.RED);
             restingHeartRateValid = false;
         }
         try {
             // Überprüfen des eingegebenen Gewichtes
-            weight = Integer.parseInt(edtWeight.getText().toString());
-            edtWeight.setBackgroundColor(defaultColor);
+            //weight = Integer.parseInt(nbpWeight.getText().toString());
+            nbpWeight.setBackgroundColor(defaultColor);
             if (weight < 20 || weight > 150) {
-                edtWeight.setBackgroundColor(Color.RED);
+                nbpWeight.setBackgroundColor(Color.RED);
                 weightValid = false;
             } else {
                 weightValid = true;
             }
         } catch (Exception ThatHasHappenend) {
-            edtWeight.setBackgroundColor(Color.RED);
+            nbpWeight.setBackgroundColor(Color.RED);
             weightValid = false;
         }
         try {
             // Überprüfen des eingegebenen Alters.
-            age = Integer.parseInt(edtAge.getText().toString());
-            edtAge.setBackgroundColor(defaultColor);
+            //age = Integer.parseInt(nbpAge.getText().toString());
+            nbpAge.setBackgroundColor(defaultColor);
             if (age < 5 || age > 110) {
-                edtAge.setBackgroundColor(Color.RED);
+                nbpAge.setBackgroundColor(Color.RED);
                 ageValid = false;
             } else {
                 ageValid = true;
             }
         } catch (Exception ThatHasHappenend) {
-            edtAge.setBackgroundColor(Color.RED);
+            nbpAge.setBackgroundColor(Color.RED);
             ageValid = false;
         }
         // Alle Ergebnisse überprüfen und daraufhin den Rückgabewert festlegen.
@@ -261,12 +262,12 @@ public class PersonalSettingsActivity extends Activity {
         // Erstmal unsere ganzen Views in der Activity in Variabeln referenzieren.
         edtName = (EditText) findViewById(R.id.prename_edit_text);
         edtFamiliyName = (EditText) findViewById(R.id.surname_edit_text);
-        edtAge = (EditText) findViewById(R.id.age_edit_text);
-        edtWeight = (EditText) findViewById(R.id.weight_edit_text);
-        edtHeight = (EditText) findViewById(R.id.height_edit_text);
-        edtRestHR = (EditText) findViewById(R.id.restHR_edit_text);
+        nbpAge = (NumberPicker) findViewById(R.id.age_number_picker);
+        nbpWeight = (NumberPicker) findViewById(R.id.weight_number_picker);
+        nbpHeight = (NumberPicker) findViewById(R.id.height_number_picker);
+        nbpRestHR = (NumberPicker) findViewById(R.id.restHR_number_picker);
         rgbGender = (RadioGroup) findViewById(R.id.rg_gender);
-        defaultColor = edtWeight.getDrawingCacheBackgroundColor();
+        defaultColor = nbpWeight.getDrawingCacheBackgroundColor();
         rgbFitness = (RadioGroup) findViewById(R.id.rgb_fitnesslevel);
 
     }

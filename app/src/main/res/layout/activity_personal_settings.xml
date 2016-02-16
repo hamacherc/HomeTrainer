@@ -4,35 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:isScrollContainer="true">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="Vorname"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="Nachname"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="3dp">
         <EditText
+            android:id="@+id/prename_edit_text"
+            android:hint="@string/edit_text_prename"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -40,9 +22,10 @@
             android:textSize="18sp"
             android:layout_margin="5dp"
             android:text=""
-            android:inputType="textCapWords"
-            android:id="@+id/prename_edit_text"/>
+            android:inputType="textCapWords"/>
         <EditText
+            android:id="@+id/surname_edit_text"
+            android:hint="@string/edit_text_familyname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -50,117 +33,93 @@
             android:textSize="18sp"
             android:layout_margin="5dp"
             android:text=""
-            android:inputType="textCapWords"
-            android:id="@+id/surname_edit_text"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
-        <TextView
-            android:layout_width="90dp"
+            android:inputType="textCapWords"/>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="Größe"/>
-        <TextView
-            android:layout_width="100dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Größe"/>
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Gewicht"/>
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Ruhepuls"/>
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Alter"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="Gewicht"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="Ruhepuls"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text=""
-            android:inputType="number"
-            android:id="@+id/height_edit_text"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="cm"/>
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text=""
-            android:inputType="number"
-            android:id="@+id/weight_edit_text"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="kg"/>
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text=""
-            android:inputType="number"
-            android:id="@+id/restHR_edit_text"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="bpm"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
+            android:orientation="horizontal">
+            <NumberPicker
+                android:layout_width="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/height_number_picker"/>
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical"
+                android:text="cm"/>
+            <NumberPicker
+                android:id="@+id/weight_number_picker"
+                android:layout_marginLeft="5dp"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="18sp"
+                android:text="kg"/>
+            <NumberPicker
+                android:id="@+id/restHR_number_picker"
+                android:layout_marginLeft="5dp"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="18sp"
+                android:text="bpm"/>
+            <NumberPicker
+                android:layout_marginLeft="5dp"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/age_number_picker"/>
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="18sp"
+                android:text="Jahre"/>
+        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
+            android:layout_gravity="left"
             android:textSize="18sp"
-            android:layout_margin="5dp"
+            android:layout_marginTop="20dp"
             android:text="Geschlecht"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="Alter"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
         <RadioGroup
             android:orientation="horizontal"
             android:layout_width="wrap_content"
@@ -180,42 +139,13 @@
                 android:text="Weiblich"
                 android:id="@+id/rb_female"/>
         </RadioGroup>
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text=""
-            android:layout_marginLeft="20dp"
-            android:inputType="number"
-            android:id="@+id/age_edit_text"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
+            android:layout_gravity="left"
             android:textSize="18sp"
-            android:layout_margin="5dp"
-            android:text="Jahre"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:textSize="18sp"
-            android:layout_margin="5dp"
+            android:layout_marginTop="15dp"
             android:text="Grundfitnesslevel"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
         <RadioGroup
             android:orientation="horizontal"
             android:layout_width="wrap_content"
@@ -241,11 +171,13 @@
                 android:id="@+id/rb_topfit"
                 android:text="Topfit"/>
         </RadioGroup>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Speichern"
+            android:onClick="onClickReady"/>
     </LinearLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Speichern"
-        android:onClick="onClickReady"/>
+</ScrollView>
 </LinearLayout>

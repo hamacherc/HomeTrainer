@@ -32,7 +32,7 @@
         android:textSize="78sp"
         android:textStyle="italic"
         android:layout_margin="10dp"
-        android:text="000"
+        android:text="---"
         android:layout_gravity="left|bottom" />
 
     <TextView
@@ -44,10 +44,11 @@
         android:layout_gravity="right|bottom" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lines="2"
         android:maxLines="2"
+        android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/text_Message"
         android:layout_gravity="center"
@@ -67,6 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|top">
+
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
