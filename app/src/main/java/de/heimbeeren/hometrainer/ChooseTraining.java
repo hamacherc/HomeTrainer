@@ -85,6 +85,12 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
             // Als Ergebnis wird ein Boolscher Wert erwartet, der True ist, sobald gültige
             // Einstellungen vorliegen.
             startActivityForResult(getPersonalSettingsIntent, REQUEST_PERSONAL_SETTINGS);
+        } else if (id == R.id.action_user_login) {
+            Intent UserLoginIntent = new Intent(this, UserLoginActivity.class);
+            final int USER_LOGIN = 3;
+            // Es wird eine Activity aufgerufen, in der versucht wird,
+            // einen Userlogin per MySQL-DB zu verwirklichen
+            startActivityForResult(UserLoginIntent, USER_LOGIN);
         }
 
         return super.onOptionsItemSelected(item);

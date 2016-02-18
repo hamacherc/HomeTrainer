@@ -9,7 +9,12 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_personal_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
         android:title="@string/action_personal_settings_text"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_user_login"
+        android:orderInCategory="102"
+        android:title="@string/user_login_menu_text"
+        />
 </menu>

@@ -40,6 +40,13 @@
     <string name="label_EB_text">Entwicklungsbereich (EB) :</string>
     <string name="label_sb_text">Spitzenbereich (SB) :</string>
     <string name="readygo_text">Und Los!</string>
+    <string name="user_login_menu_text">Benutzeranmeldung</string>
+    <string name="text_username">Benutzername</string>
+    <string name="text_password">Passwort</string>
+    <string name="text_login">Anmelden</string>
+    <string name="text_registration">Wenn Sie noch keinen User angelegt haben,
+        drücken Sie auf Registrieren</string>
+    <string name="text_register_button">Registrieren</string>
 
 
 </resources>
