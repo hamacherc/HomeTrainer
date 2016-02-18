@@ -30,6 +30,7 @@
             android:screenOrientation="landscape"/>
         <activity android:name=".DeviceScanActivity"/>
         <activity android:name=".UserLoginActivity"/>
+        <activity android:name=".RegisterActivity"/>
         <activity android:name=".PersonalSettingsActivity"/>
         <service android:name=".BluetoothLeService" android:enabled="true"/>
 
