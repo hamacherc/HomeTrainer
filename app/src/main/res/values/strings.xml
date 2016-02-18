@@ -47,6 +47,8 @@
     <string name="text_registration">Wenn Sie noch keinen User angelegt haben,
         drücken Sie auf Registrieren</string>
     <string name="text_register_button">Registrieren</string>
+    <string name="hint_user_pass_filled">Username und Passwort müssen ausgefüllt sein.</string>
+    <string name="hint_user_pass_min_length">Username und Passwort müssen mehr als 1 Zeichen enthalten</string>
 
 
 </resources>
