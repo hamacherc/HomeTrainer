@@ -280,6 +280,7 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         cycling = true;
          switch (workoutMode) {
             case WORKOUT_GA1:
+                txvMessage.setTextColor(Color.GREEN);
                 isManagedByHR = true;
                 minThreshold = minGA1HR;
                 maxThreshold = minGA2HR;
@@ -313,13 +314,13 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
                 upperCadence = 100;
                 slope = 0;
                 showWorkoutData();
-                if (SystemClock.elapsedRealtime() - chronometer.getBase() > relaxTimeMS) {
-                    isManagedByHR = false;
-                    txvMessage.setText("Jetzt 5 Minuten locker ausradeln!");
-                } else if (SystemClock.elapsedRealtime() - chronometer.getBase() > endTimeMS) {
+                if (SystemClock.elapsedRealtime() - chronometer.getBase() > endTimeMS) {
                     isManagedByHR = false;
                     stopWatch.stop();
                     txvMessage.setText("Training beendet!");
+                } else if (SystemClock.elapsedRealtime() - chronometer.getBase() > relaxTimeMS) {
+                    isManagedByHR = false;
+                    txvMessage.setText("Jetzt 5 Minuten locker ausradeln!");
                 }
             }
         });
