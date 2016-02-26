@@ -31,6 +31,8 @@ public class UserLoginActivity extends Activity implements View.OnClickListener 
     super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initializeViews();
+        butLogin.setOnClickListener(this);
+        butRegister.setOnClickListener(this);
     }
 
     private void initializeViews() {
@@ -40,7 +42,7 @@ public class UserLoginActivity extends Activity implements View.OnClickListener 
         butRegister = (Button) findViewById(R.id.but_register);
     }
 
-    private void registerUser() {
+    private void loginUser() {
         String username = edtUsername.getText().toString().trim().toLowerCase();
         String password = edtPassword.getText().toString().trim().toLowerCase();
 
@@ -69,10 +71,9 @@ public class UserLoginActivity extends Activity implements View.OnClickListener 
             protected String doInBackground(String... params) {
 
                 HashMap<String, String> data = new HashMap<String, String>();
-                data.put("name", params[0]);
-                data.put("username", params[1]);
-                data.put("password", params[2]);
-                data.put("email", params[3]);
+                data.put("username", params[0]);
+                data.put("password", params[1]);
+
 
                 String result = ruc.sendPostRequest(LOGIN_URL, data);
 
@@ -103,6 +104,7 @@ public class UserLoginActivity extends Activity implements View.OnClickListener 
                     Toast.makeText(UserLoginActivity.this, getString(R.string.hint_user_pass_min_length),
                             Toast.LENGTH_SHORT).show();
                 }
+                loginUser();
                 break;
         }
     }
