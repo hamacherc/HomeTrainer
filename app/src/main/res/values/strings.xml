@@ -51,6 +51,7 @@
     <string name="hint_user_pass_min_length">Username und Passwort müssen mehr als 1 Zeichen enthalten</string>
     <string name="text_full_name">Vollständiger Name</string>
     <string name="text_email_address">E-Mail-Adresse</string>
+    <string name="text_go_more_relaxed">Mach lockerer!\nDu strengst Dich zu sehr an!</string>
 
 
 </resources>

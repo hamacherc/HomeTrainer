@@ -191,9 +191,9 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
             if (actualHR < minThreshold && isManagedByHR) {
                 txvMessage.setText("Du musst mehr Gas geben!!!\nPuls muss mindestens " + minThreshold + " sein!!");
             } else if (actualHR > maxThreshold && isManagedByHR)  {
-                txvMessage.setText("Mach Lockerer!\nDu strengst Dich zu sehr an!");
+                txvMessage.setText(R.string.text_go_more_relaxed);
             } else if (isManagedByHR) {
-                txvMessage.setText("Super! Du bist in Deinem Traininsbereich!");
+                txvMessage.setText("Super! Du bist in Deinem Trainingsbereich!");
             }
         }
     }
@@ -283,7 +283,7 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
                 txvMessage.setTextColor(Color.GREEN);
                 isManagedByHR = true;
                 minThreshold = minGA1HR;
-                maxThreshold = minGA2HR;
+                maxThreshold = minEBHR;
                 manageByHR();
                 break;
             case WORKOUT_GA2:
@@ -306,8 +306,8 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         stopWatch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
-                double endTimeMS = (45 * 1000 * 60);
-                double relaxTimeMS = (40 * 1000 * 60);
+                double endTimeMS = (100 * 1000 * 60);
+                double relaxTimeMS = (90 * 1000 * 60);
                 frontGear = 2;
                 backGear = 6;
                 lowerCadence = 90;
@@ -320,7 +320,7 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
                     txvMessage.setText("Training beendet!");
                 } else if (SystemClock.elapsedRealtime() - chronometer.getBase() > relaxTimeMS) {
                     isManagedByHR = false;
-                    txvMessage.setText("Jetzt 5 Minuten locker ausradeln!");
+                    txvMessage.setText("Jetzt 10 Minuten locker ausradeln!");
                 }
             }
         });

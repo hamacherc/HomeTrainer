@@ -4,17 +4,23 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
 
 
 public class ChooseTraining extends AppCompatActivity implements View.OnClickListener {
+    private final static String TAG = ChooseTraining.class.getSimpleName();
     private static final int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter mBluetoothAdapter;
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
@@ -23,6 +29,7 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
     private String mDeviceName;
     private String mDeviceAddress;
     private boolean boolPersonalDataPresent = false;
+    SQLiteDatabase workoutDB = null;
 
 
     @Override
@@ -44,6 +51,9 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
+
+        openDatabase();
+
 
         /*
          Unser Startknopf für das ausgewählte Trainingsprogramm
@@ -120,7 +130,6 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
 
     }
 
-
     @Override
     public void onClick(View PushedButton) {
         switch(PushedButton.getId()) {
@@ -133,4 +142,37 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
                break;
         }
     }
+
+    private void openDatabase() {
+
+        try {
+
+
+            workoutDB = this.openOrCreateDatabase("WorkoutDB", MODE_PRIVATE, null);
+
+            workoutDB.execSQL("CREATE TABLE IF NOT EXISTS workoutsTable " +
+                    "(id integer primary key, workoutname varchar, slope integer, time varchar, " +
+                    "gearfront integer, gearback integer, lowecadence integer, uppercadence integer" +
+                    "details varchar);");
+
+            File database = getApplicationContext().getDatabasePath("WorkoutDB.db");
+
+            if (database.exists()) {
+
+                Toast.makeText(this, "Database Created", Toast.LENGTH_SHORT).show();
+
+            } else {
+
+                Toast.makeText(this, "Database missing", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        catch (Exception e) {
+            Log.e(TAG, "Database Creation Error");
+        }
+
+
+
+    }
+
 }
