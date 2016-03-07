@@ -30,7 +30,6 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String SELECTED_PLAN = "SELECTED_PLAN";
-    public static final String EXTRAS_DATA_PRESENT = "DATA_PRESENT";
     private Spinner planSpinner;
     private String mDeviceName,selectedPlan;
     private String mDeviceAddress;
@@ -39,32 +38,9 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_training);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-        // Initializes Bluetooth adapter.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
-
-        // Ensures Bluetooth is available on the device and it is enabled. If not,
-        // displays a dialog requesting user permission to enable Bluetooth.
-        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-        planSpinner = (Spinner) findViewById(R.id.spinner_select_mode);
-        planSpinner.setOnItemSelectedListener(this);
-
+        initializeBluetooth();
         firstWorkoutPlan();
-        loadSpinnerData();
-
-        selectedPlan = planSpinner.getSelectedItem().toString();
-        Log.d(TAG, "Selected Plan: " + selectedPlan);
-
-        Button butStartTraining = (Button) findViewById(R.id.but_start_training);
-        butStartTraining.setOnClickListener(this);
+        initializeViews();
     }
 
     // Standardcode für das Menü.
@@ -148,28 +124,55 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
 
     private void firstWorkoutPlan() {
 
-        int[] slope = {-3,0,2,-2,3,-3,1,-3,-4,0,-1,0,1,0,-4};
-        String[] stepTime = {"4","3","1","1","1","1","1","2","3","2","2","3","2","2","4"};
-        int[] gearFront = {2,3,2,2,2,2,3,2,2,3,2,2,2,3,2};
-        int[] gearBack = {6,7,7,7,6,8,8,8,8,8,8,8,8,8,6};
-        String[] lowerCadence = {"80","","","90","","90","","90","80","","","80","","80","100"};
-        String[] upperCadence = {"100","80","","100","","110","","110","","","110","100","110","100","110"};
-        String[] stepDetails = {"Warm up / Loose up", "3 times 30'' spin ups and 30'' rest", "30 - 35 km/h",
-                "","30 - 35 km/h", "", "30 - 35 km/h", "", "3 times 30'' spin ups and 30'' rest",
-                "35 - 40 km/h", "", "3 times 30'' left leg only and 30'' right leg only",
-                "", "High Speed!", "Cool Down and Stretch afterwards"};
+        // Load the Workout Database
+
+        String workoutPlanName;
+
+        int[] slope;
+        String[] stepTime;
+        int[] gearFront;
+        int[] gearBack;
+        String[] lowerCadence;
+        String[] upperCadence;
+        String[] stepDetails;
 
         WorkoutsDBHelper dbHelper = new WorkoutsDBHelper(this);
         dbHelper.deleteWorkoutPlanList();
 
-        String workoutPlanName = "Intervalltraining BRA1";
+        workoutPlanName = "Ausdauertraining GA2";
+        slope = new int[] {0};
+        stepTime = new String[] {"120"};
+        gearFront = new int[] {2};
+        gearBack = new int[] {6};
+        lowerCadence = new String[] {"90"};
+        upperCadence = new String[] {"100"};
+        stepDetails = new String[] {"120 Minuten Ausdauertraining nach Puls"};
         for (int i= 0; i < slope.length; i++) {
-            dbHelper.insertWorkoutStep(workoutPlanName, slope[i], stepTime[i], gearFront[i], gearBack[i],
+            dbHelper.insertWorkoutStep(workoutPlanName, 2, slope[i], stepTime[i], gearFront[i], gearBack[i],
+                    lowerCadence[i], upperCadence[i], stepDetails[i]);
+        }
+
+
+        slope = new int[] {-3,0,2,-2,3,-3,1,-3,-4,0,-1,0,1,0,-4};
+        stepTime = new String[] {"4","3","1","1","1","1","1","2","3","2","2","3","2","2","4"};
+        gearFront = new int[] {2,3,2,2,2,2,3,2,2,3,2,2,2,3,2};
+        gearBack = new int[] {6,7,7,7,6,8,8,8,8,8,8,8,8,8,6};
+        lowerCadence = new String[] {"80","","","90","","90","","90","80","","","80","","80","100"};
+        upperCadence = new String[] {"100","80","","100","","110","","110","","","110","100","110","100","110"};
+        stepDetails = new String[] {"Warm up / Loose up", "3 times 30'' spin ups and 30'' rest", "30 - 35 km/h",
+                "","30 - 35 km/h", "", "30 - 35 km/h", "", "3 times 30'' spin ups and 30'' rest",
+                "35 - 40 km/h", "", "3 times 30'' left leg only and 30'' right leg only",
+                "", "High Speed!", "Cool Down and Stretch afterwards"};
+
+
+        workoutPlanName = "Intervalltraining BRA1";
+        for (int i= 0; i < slope.length; i++) {
+            dbHelper.insertWorkoutStep(workoutPlanName, 3, slope[i], stepTime[i], gearFront[i], gearBack[i],
                     lowerCadence[i], upperCadence[i], stepDetails[i]);
         }
         workoutPlanName = "Intervalltraining BRA2";
         for (int i= 0; i < slope.length; i++) {
-            dbHelper.insertWorkoutStep(workoutPlanName, slope[i], stepTime[i], gearFront[i], gearBack[i],
+            dbHelper.insertWorkoutStep(workoutPlanName, 3, slope[i], stepTime[i], gearFront[i], gearBack[i],
                     lowerCadence[i], upperCadence[i], stepDetails[i]);
         }
     }
@@ -202,4 +205,32 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    private void initializeViews() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        planSpinner = (Spinner) findViewById(R.id.spinner_select_mode);
+        planSpinner.setOnItemSelectedListener(this);
+        loadSpinnerData();
+        selectedPlan = planSpinner.getSelectedItem().toString();
+        Log.d(TAG, "Selected Plan: " + selectedPlan);
+        Button butStartTraining = (Button) findViewById(R.id.but_start_training);
+        butStartTraining.setOnClickListener(this);
+    }
+
+    private void initializeBluetooth() {
+        // Initializes Bluetooth adapter.
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+
+        // Ensures Bluetooth is available on the device and it is enabled. If not,
+        // displays a dialog requesting user permission to enable Bluetooth.
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+    }
+
 }

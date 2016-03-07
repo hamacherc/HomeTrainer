@@ -54,15 +54,33 @@
         android:textAlignment="center"
         android:textColor="@color/GREEN" />
 
-    <Chronometer
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/chronometer"
-        android:layout_gravity="center_horizontal|top"
-        android:textSize="68sp"
-        android:textColor="#33691e"
-        android:textStyle="italic"/>
+        android:layout_gravity="center_horizontal|top">
+
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/chronometer"
+            android:layout_gravity="center_horizontal|top"
+            android:textSize="68sp"
+            android:textColor="#33691e"
+            android:textStyle="italic"/>
+
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_below="@+id/chronometer"
+            android:id="@+id/stepometer"
+            android:layout_gravity="center_horizontal"
+            android:textSize="68sp"
+            android:textColor="#33691e"
+            android:textStyle="italic"/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"

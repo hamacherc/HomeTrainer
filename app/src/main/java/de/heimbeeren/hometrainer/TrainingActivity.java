@@ -23,9 +23,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -42,7 +39,7 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     BluetoothLeService mBluetoothLeService;
     boolean mDeviceConnected;
     int minRekomHR, minGA1HR, minGA2HR, minEBHR, minSBHR, actualHR, minThreshold, maxThreshold,
-        lowerCadence, upperCadence, slope, frontGear, backGear;
+        lowerCadence, upperCadence, slope, frontGear, backGear, totalTime;
     double maxHeartRate;
     boolean userDataAvailable,isManagedByHR, cycling;
     final private double COUCH_POTATO = 0.5;
@@ -52,24 +49,31 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     final private int WORKOUT_GA2 = 2;
     final private int WORKOUT_TABLE = 3;
     final private int WORKOUT_VIDEO = 4;
-    int workoutMode = WORKOUT_GA1;
+    int workoutMode;
     TextView mDataField, txtDeviceName, countdownTimerView, txvMessage, txvUpperCadence,
             txvLowerCadence, txvSlope, txvFrontGear, txvBackGear;
     Button butStartTraining;
+    Chronometer stepWatch;
     Chronometer stopWatch;
+    // Unseren Datenbankhelfer aktivieren.
+    WorkoutsDBHelper workoutPlan = new WorkoutsDBHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
+
         // Während des Trainings wollen wir nicht, dass der Bildschirm ausgeht.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        initializeViews(); // Views in Variabeln referenzieren.
-        Intent chooseTrainingActivity = getIntent();
-        // Die Übergebenen Werte vom ausgewählten Brustgurt auslesen.
-        mDeviceName = chooseTrainingActivity.getExtras().getString(EXTRAS_DEVICE_NAME);
-        mDeviceAddress = chooseTrainingActivity.getExtras().getString(EXTRAS_DEVICE_ADDRESS);
-        selectedPlan = chooseTrainingActivity.getExtras().getString(EXTRAS_SELECTED_PLAN);
+
+        // Views in Variabeln referenzieren.
+        initializeViews();
+
+        // Brustgurtnamen und zu trainierenden Trainingsplan auswerten.
+        Intent previousActivity = getIntent();
+        mDeviceName = previousActivity.getExtras().getString(EXTRAS_DEVICE_NAME);
+        mDeviceAddress = previousActivity.getExtras().getString(EXTRAS_DEVICE_ADDRESS);
+        selectedPlan = previousActivity.getExtras().getString(EXTRAS_SELECTED_PLAN);
 
         Log.d(TAG, "Es wird " + selectedPlan + " trainiert.");
 
@@ -78,10 +82,12 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
             userDataAvailable = PersonalSettingsActivity.loadSettings(pref);
             // Gibt es schon User-Settings im Shared-Preferences Store?
             if (userDataAvailable) {
-                // Ja? Dann mal Traininsbereiche berechnen.
+                // Ja? Dann mal Trainingsbereiche berechnen.
                 calculateHR();
             }
         }
+
+        workoutMode = workoutPlan.getWorkoutType(selectedPlan);
 
         txtDeviceName.setText(mDeviceName); // Name des verwendeten Pulsgurtes einblenden.
         // Den Bluetooth-Service für den Pulsgurt einbinden
@@ -90,9 +96,6 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
 
         butStartTraining.setOnClickListener(this); // Listener für unseren Start-Button
 
-        // Zeichensatz für unsere Stoppuhr festlegen (7-Digit-Anzeige)
-        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/lcdmn.ttf");
-        stopWatch.setTypeface(type);
 
         isManagedByHR = false;
     }
@@ -151,7 +154,8 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
             mBluetoothLeService = null;
         }
 
-        };
+    };
+
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -276,23 +280,29 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         txvSlope = (TextView) findViewById(R.id.txt_slope);
         txvLowerCadence = (TextView) findViewById(R.id.txt_rpm_lower);
         txvUpperCadence = (TextView) findViewById(R.id.txt_rpm_upper);
+        stepWatch = (Chronometer) findViewById(R.id.stepometer);
+        // Zeichensatz für unsere Stoppuhr festlegen (7-Digit-Anzeige)
+        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/lcdmn.ttf");
+        stopWatch.setTypeface(type);
+        stepWatch.setTypeface(type);
     }
 
     protected void startBiking() {
+        totalTime = workoutPlan.getWorkoutTotalTime(selectedPlan);
+        workoutPlan.loadCurrentWorkoutPlan(selectedPlan);
+
+        Log.d(TAG, "Gesamttrainigsdauer: " + totalTime + " Minuten");
+
         stopWatch.setBase(SystemClock.elapsedRealtime());
+        stepWatch.setBase(SystemClock.elapsedRealtime());
         stopWatch.start();
+        stepWatch.start();
         cycling = true;
          switch (workoutMode) {
-            case WORKOUT_GA1:
+            case WORKOUT_GA2:
                 txvMessage.setTextColor(Color.GREEN);
                 isManagedByHR = true;
                 minThreshold = minGA1HR;
-                maxThreshold = minEBHR;
-                manageByHR();
-                break;
-            case WORKOUT_GA2:
-                isManagedByHR = true;
-                minThreshold = minGA2HR;
                 maxThreshold = minEBHR;
                 manageByHR();
                 break;
@@ -310,8 +320,8 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         stopWatch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
-                double endTimeMS = (100 * 1000 * 60);
-                double relaxTimeMS = (90 * 1000 * 60);
+                double endTimeMS = ((totalTime + 10) * 1000 * 60);
+                double relaxTimeMS = (totalTime * 1000 * 60);
                 frontGear = 2;
                 backGear = 6;
                 lowerCadence = 90;
