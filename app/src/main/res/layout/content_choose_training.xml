@@ -20,6 +20,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/view_belt_address_hint"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_select_mode"
+        android:prompt="@string/spinner_title"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

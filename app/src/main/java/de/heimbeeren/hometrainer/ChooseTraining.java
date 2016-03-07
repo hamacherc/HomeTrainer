@@ -12,25 +12,28 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.List;
 
 
-public class ChooseTraining extends AppCompatActivity implements View.OnClickListener {
+public class ChooseTraining extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener {
     private final static String TAG = ChooseTraining.class.getSimpleName();
     private static final int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter mBluetoothAdapter;
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String SELECTED_PLAN = "SELECTED_PLAN";
     public static final String EXTRAS_DATA_PRESENT = "DATA_PRESENT";
-    private String mDeviceName;
+    private Spinner planSpinner;
+    private String mDeviceName,selectedPlan;
     private String mDeviceAddress;
-    private boolean boolPersonalDataPresent = false;
-    SQLiteDatabase workoutDB = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +54,15 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
+        planSpinner = (Spinner) findViewById(R.id.spinner_select_mode);
+        planSpinner.setOnItemSelectedListener(this);
 
-        openDatabase();
+        firstWorkoutPlan();
+        loadSpinnerData();
 
+        selectedPlan = planSpinner.getSelectedItem().toString();
+        Log.d(TAG, "Selected Plan: " + selectedPlan);
 
-        /*
-         Unser Startknopf für das ausgewählte Trainingsprogramm
-         Der Auswahl-Spinner ist noch nicht gebaut
-         */
         Button butStartTraining = (Button) findViewById(R.id.but_start_training);
         butStartTraining.setOnClickListener(this);
     }
@@ -124,8 +128,6 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
             addressOfBelt.setText(mDeviceAddress);
         }
         else if (requestCode == 2) {
-            // Persönliche Einstellungen-Activity? Erfolg abfragen.
-            boolPersonalDataPresent = data.getBooleanExtra(EXTRAS_DATA_PRESENT, false);
         }
 
     }
@@ -138,41 +140,66 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
                 Intent nowStartTraining = new Intent(this, TrainingActivity.class);
                 nowStartTraining.putExtra(EXTRAS_DEVICE_NAME, mDeviceName);
                 nowStartTraining.putExtra(EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                nowStartTraining.putExtra(SELECTED_PLAN, selectedPlan);
                 startActivity(nowStartTraining);
                break;
         }
     }
 
-    private void openDatabase() {
+    private void firstWorkoutPlan() {
 
-        try {
+        int[] slope = {-3,0,2,-2,3,-3,1,-3,-4,0,-1,0,1,0,-4};
+        String[] stepTime = {"4","3","1","1","1","1","1","2","3","2","2","3","2","2","4"};
+        int[] gearFront = {2,3,2,2,2,2,3,2,2,3,2,2,2,3,2};
+        int[] gearBack = {6,7,7,7,6,8,8,8,8,8,8,8,8,8,6};
+        String[] lowerCadence = {"80","","","90","","90","","90","80","","","80","","80","100"};
+        String[] upperCadence = {"100","80","","100","","110","","110","","","110","100","110","100","110"};
+        String[] stepDetails = {"Warm up / Loose up", "3 times 30'' spin ups and 30'' rest", "30 - 35 km/h",
+                "","30 - 35 km/h", "", "30 - 35 km/h", "", "3 times 30'' spin ups and 30'' rest",
+                "35 - 40 km/h", "", "3 times 30'' left leg only and 30'' right leg only",
+                "", "High Speed!", "Cool Down and Stretch afterwards"};
 
+        WorkoutsDBHelper dbHelper = new WorkoutsDBHelper(this);
+        dbHelper.deleteWorkoutPlanList();
 
-            workoutDB = this.openOrCreateDatabase("WorkoutDB", MODE_PRIVATE, null);
-
-            workoutDB.execSQL("CREATE TABLE IF NOT EXISTS workoutsTable " +
-                    "(id integer primary key, workoutname varchar, slope integer, time varchar, " +
-                    "gearfront integer, gearback integer, lowecadence integer, uppercadence integer" +
-                    "details varchar);");
-
-            File database = getApplicationContext().getDatabasePath("WorkoutDB.db");
-
-            if (database.exists()) {
-
-                Toast.makeText(this, "Database Created", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "Database missing", Toast.LENGTH_SHORT).show();
-            }
+        String workoutPlanName = "Intervalltraining BRA1";
+        for (int i= 0; i < slope.length; i++) {
+            dbHelper.insertWorkoutStep(workoutPlanName, slope[i], stepTime[i], gearFront[i], gearBack[i],
+                    lowerCadence[i], upperCadence[i], stepDetails[i]);
         }
-
-        catch (Exception e) {
-            Log.e(TAG, "Database Creation Error");
+        workoutPlanName = "Intervalltraining BRA2";
+        for (int i= 0; i < slope.length; i++) {
+            dbHelper.insertWorkoutStep(workoutPlanName, slope[i], stepTime[i], gearFront[i], gearBack[i],
+                    lowerCadence[i], upperCadence[i], stepDetails[i]);
         }
-
-
-
     }
 
+    private void loadSpinnerData() {
+        // Datenbank-Helfer
+        WorkoutsDBHelper db = new WorkoutsDBHelper(getApplicationContext());
+
+        // Alle Plannamen laden
+        List<String> plans = db.getPlanList();
+
+        // Adapter für den Spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, plans);
+
+        // Adapter Layout setzen
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+        // Adapter an den Spinner binden
+        planSpinner.setAdapter(dataAdapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        selectedPlan = parent.getItemAtPosition(position).toString();
+        Log.d(TAG, "Selected Plan: " + selectedPlan);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

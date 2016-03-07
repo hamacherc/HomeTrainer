@@ -25,6 +25,7 @@
     <string name="pref_usersettings_key">UserSettings</string>
     <string name="toast_invalid_values_text">Bitte nochmal die eingegebenen Werte prüfem.</string>
     <string name="greetings_text">Hallo %s!</string>
+    <string name="spinner_title">Trainingsmodus auswählen</string>
 
 
     <!-- Menu items -->

@@ -37,7 +37,8 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     private final static String TAG = TrainingActivity.class.getSimpleName();
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    String mDeviceName, mDeviceAddress;
+    public static final String EXTRAS_SELECTED_PLAN = "SELECTED_PLAN";
+    String mDeviceName, mDeviceAddress, selectedPlan;
     BluetoothLeService mBluetoothLeService;
     boolean mDeviceConnected;
     int minRekomHR, minGA1HR, minGA2HR, minEBHR, minSBHR, actualHR, minThreshold, maxThreshold,
@@ -68,6 +69,9 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
         // Die Übergebenen Werte vom ausgewählten Brustgurt auslesen.
         mDeviceName = chooseTrainingActivity.getExtras().getString(EXTRAS_DEVICE_NAME);
         mDeviceAddress = chooseTrainingActivity.getExtras().getString(EXTRAS_DEVICE_ADDRESS);
+        selectedPlan = chooseTrainingActivity.getExtras().getString(EXTRAS_SELECTED_PLAN);
+
+        Log.d(TAG, "Es wird " + selectedPlan + " trainiert.");
 
         SharedPreferences pref = this.getSharedPreferences("UserSettings", MODE_PRIVATE);
         if (pref.contains("name")) {
