@@ -157,12 +157,13 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
         stepTime = new String[] {"4","3","1","1","1","1","1","2","3","2","2","3","2","2","4"};
         gearFront = new int[] {2,3,2,2,2,2,3,2,2,3,2,2,2,3,2};
         gearBack = new int[] {6,7,7,7,6,8,8,8,8,8,8,8,8,8,6};
-        lowerCadence = new String[] {"80","","","90","","90","","90","80","","","80","","80","100"};
-        upperCadence = new String[] {"100","80","","100","","110","","110","","","110","100","110","100","110"};
-        stepDetails = new String[] {"Warm up / Loose up", "3 times 30'' spin ups and 30'' rest", "30 - 35 km/h",
-                "","30 - 35 km/h", "", "30 - 35 km/h", "", "3 times 30'' spin ups and 30'' rest",
-                "35 - 40 km/h", "", "3 times 30'' left leg only and 30'' right leg only",
-                "", "High Speed!", "Cool Down and Stretch afterwards"};
+        lowerCadence = new String[] {"80","<","","90","","90","","90",">","","","80","","80","100"};
+        upperCadence = new String[] {"100","80","","100","","110","","110","80","","110","100","110","100","110"};
+        stepDetails = new String[] {"Aufwärmen!", "3 * 30 Sek. Gas geben und 30 sek. ruhen", "30 - 35 km/h",
+                "Locker Pedalieren","30 - 35 km/h", "Locker Pedalieren", "30 - 35 km/h", "Locker Pedalieren",
+                "3 * 30 Sek. Gas geben und 30 sek. ruhen", "35 - 40 km/h", "Locker Pedalieren",
+                "3 * 30 sek. nur linkes Bein und 30 Sek. nur rechtes Bein",
+                "", "Vollgas!", "Abkühlphase"};
 
 
         workoutPlanName = "Intervalltraining BRA1";
@@ -175,6 +176,23 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
             dbHelper.insertWorkoutStep(workoutPlanName, 3, slope[i], stepTime[i], gearFront[i], gearBack[i],
                     lowerCadence[i], upperCadence[i], stepDetails[i]);
         }
+
+        slope = new int[] {-3,1,0};
+        stepTime = new String[] {"1","1","1"};
+        gearFront = new int[] {2,3,2};
+        gearBack = new int[] {6,7,7};
+        lowerCadence = new String[] {"<","80","100"};
+        upperCadence = new String[] {"100","80","110"};
+        stepDetails = new String[] {"Aufwärmen","Trainieren","Cool Down"};
+
+        workoutPlanName = "Testtraining";
+        for (int i= 0; i < slope.length; i++) {
+            dbHelper.insertWorkoutStep(workoutPlanName, 3, slope[i], stepTime[i], gearFront[i], gearBack[i],
+                    lowerCadence[i], upperCadence[i], stepDetails[i]);
+        }
+
+
+
     }
 
     private void loadSpinnerData() {

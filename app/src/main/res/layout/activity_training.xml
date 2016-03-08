@@ -10,13 +10,29 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:gravity="center"
         android:textSize="30sp"
         android:text="@string/button_start_text"
         android:id="@+id/but_start"
-        android:visibility="visible"
-        android:layout_gravity="center_horizontal|bottom" />
+        android:visibility="visible" />
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom">
+        <TextView
+            android:layout_width="320dp"
+            android:layout_height="180dp"
+            android:lines="4"
+            android:maxLines="4"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textStyle="bold|italic"
+            android:textColor="#ffeb3b"
+            android:textSize="28sp"
+            android:id="@+id/txv_workout_step_details" />
+    </RelativeLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,33 +70,50 @@
         android:textAlignment="center"
         android:textColor="@color/GREEN" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top">
+        android:layout_gravity="center_horizontal|top"
+        android:orientation="vertical"
+        android:background="@drawable/bottom_border">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#ffee58"
+            android:text="@string/text_total_time"
+            android:textStyle="italic"/>
         <Chronometer
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/chronometer"
+            android:gravity="center"
             android:layout_gravity="center_horizontal|top"
-            android:textSize="68sp"
+            android:textSize="42sp"
             android:textColor="#33691e"
+            android:paddingLeft="5dp" android:paddingRight="5dp"
             android:textStyle="italic"/>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#ffee58"
+            android:text="@string/text_workout_step"
+            android:textStyle="italic"/>
         <Chronometer
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_below="@+id/chronometer"
             android:id="@+id/stepometer"
+            android:gravity="center"
             android:layout_gravity="center_horizontal"
-            android:textSize="68sp"
+            android:textSize="42sp"
             android:textColor="#33691e"
-            android:textStyle="italic"/>
-
-    </RelativeLayout>
+            android:paddingLeft="5dp" android:paddingRight="5dp"
+            android:textStyle="italic"
+            android:textIsSelectable="false" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"

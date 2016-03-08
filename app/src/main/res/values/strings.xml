@@ -53,6 +53,8 @@
     <string name="text_full_name">Vollständiger Name</string>
     <string name="text_email_address">E-Mail-Adresse</string>
     <string name="text_go_more_relaxed">Mach lockerer!\nDu strengst Dich zu sehr an!</string>
+    <string name="text_total_time">Gesamtzeit: </string>
+    <string name="text_workout_step">Trainingsschritt: </string>
 
 
 </resources>
