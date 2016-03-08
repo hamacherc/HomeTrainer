@@ -231,6 +231,7 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
             public void onChronometerTick(Chronometer chronometer) {
                 if (currentStep < workoutPlan.totalSteps) {
                     stepTimeMS = (workoutPlan.stepTime[currentStep] * 1000 * 60);
+                    if (!mDeviceConnected) mBluetoothLeService.connect(mDeviceAddress);
                     showWorkoutData();
                     if (SystemClock.elapsedRealtime() - chronometer.getBase() >= stepTimeMS) {
                         chronometer.setBase(SystemClock.elapsedRealtime());
