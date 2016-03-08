@@ -35,11 +35,11 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String EXTRAS_SELECTED_PLAN = "SELECTED_PLAN";
-    String mDeviceName, mDeviceAddress, selectedPlan;
+    String mDeviceName, mDeviceAddress, selectedPlan,lowerCadence, upperCadence;
     BluetoothLeService mBluetoothLeService;
     boolean mDeviceConnected;
     int minRekomHR, minGA1HR, minGA2HR, minEBHR, minSBHR, actualHR, minThreshold, maxThreshold,
-        lowerCadence, upperCadence, slope, frontGear, backGear, totalTime;
+        slope, frontGear, backGear, totalTime, currentStep;
     double maxHeartRate;
     boolean userDataAvailable,isManagedByHR, cycling;
     final private double COUCH_POTATO = 0.5;
@@ -290,8 +290,10 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     protected void startBiking() {
         totalTime = workoutPlan.getWorkoutTotalTime(selectedPlan);
         workoutPlan.loadCurrentWorkoutPlan(selectedPlan);
+        currentStep = 0;
 
         Log.d(TAG, "Gesamttrainigsdauer: " + totalTime + " Minuten");
+        Log.d(TAG, "Anzahl der Trainingsschritte: " + workoutPlan.totalSteps);
 
         stopWatch.setBase(SystemClock.elapsedRealtime());
         stepWatch.setBase(SystemClock.elapsedRealtime());
@@ -307,7 +309,11 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
                 manageByHR();
                 break;
             case WORKOUT_TABLE:
-                manageByTime();
+                txvMessage.setTextColor(Color.GREEN);
+                isManagedByHR = true;
+                minThreshold = minGA1HR;
+                maxThreshold = minEBHR;
+                manageByHR();
                 break;
             case WORKOUT_VIDEO:
                 manageByTerrain();
@@ -316,25 +322,35 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
     }
 
     protected void manageByHR() {
-        // Wir gehen zunächst mal davon aus, dass nach 40 Minuten das GA-Training endet.
+
+        stepWatch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            double stepTimeMS;
+
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                frontGear = workoutPlan.gearFront[currentStep];
+                backGear = workoutPlan.gearBack[currentStep];
+                lowerCadence = workoutPlan.lowerCadence[currentStep];
+                upperCadence = workoutPlan.upperCadence[currentStep];
+                slope = workoutPlan.slope[currentStep];
+                txvMessage.setText(workoutPlan.stepDetails[currentStep]);
+                showWorkoutData();
+                stepTimeMS = (workoutPlan.stepTime[currentStep] * 1000 * 60);
+                if (SystemClock.elapsedRealtime() - chronometer.getBase() > stepTimeMS) {
+                    currentStep++;
+                    chronometer.setBase(SystemClock.elapsedRealtime());
+                }
+            }
+        });
+
         stopWatch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 double endTimeMS = ((totalTime + 10) * 1000 * 60);
-                double relaxTimeMS = (totalTime * 1000 * 60);
-                frontGear = 2;
-                backGear = 6;
-                lowerCadence = 90;
-                upperCadence = 100;
-                slope = 0;
-                showWorkoutData();
                 if (SystemClock.elapsedRealtime() - chronometer.getBase() > endTimeMS) {
                     isManagedByHR = false;
                     stopWatch.stop();
                     txvMessage.setText("Training beendet!");
-                } else if (SystemClock.elapsedRealtime() - chronometer.getBase() > relaxTimeMS) {
-                    isManagedByHR = false;
-                    txvMessage.setText("Jetzt 10 Minuten locker ausradeln!");
                 }
             }
         });
@@ -350,8 +366,8 @@ public class TrainingActivity extends Activity implements View.OnClickListener {
 
     protected void showWorkoutData() {
         if (cycling) {
-            txvLowerCadence.setText(Integer.toString(lowerCadence));
-            txvUpperCadence.setText(Integer.toString(upperCadence));
+            txvLowerCadence.setText(lowerCadence);
+            txvUpperCadence.setText(upperCadence);
             txvBackGear.setText(Integer.toString(backGear));
             txvFrontGear.setText(Integer.toString(frontGear));
             txvSlope.setText(Integer.toString(slope));

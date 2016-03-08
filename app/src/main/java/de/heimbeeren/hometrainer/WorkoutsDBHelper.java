@@ -15,7 +15,7 @@ public final class WorkoutsDBHelper extends SQLiteOpenHelper {
 
     public String workoutPlanName;
     public int workoutPlanType;
-    public int workoutPlanSteps;
+    public int totalSteps;
     public int[] slope;
     public int[] stepTime;
     public int[] gearFront;
@@ -197,16 +197,16 @@ public final class WorkoutsDBHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        workoutPlanSteps = cursor.getCount();
+        totalSteps = cursor.getCount();
         workoutPlanName = workoutPlan;
         workoutPlanType = this.getWorkoutType(workoutPlan);
-        slope = new int[workoutPlanSteps];
-        stepTime = new int[workoutPlanSteps];
-        gearFront = new int[workoutPlanSteps];
-        gearBack = new int[workoutPlanSteps];
-        lowerCadence = new String[workoutPlanSteps];
-        upperCadence = new String[workoutPlanSteps];
-        stepDetails = new String[workoutPlanSteps];
+        slope = new int[totalSteps];
+        stepTime = new int[totalSteps];
+        gearFront = new int[totalSteps];
+        gearBack = new int[totalSteps];
+        lowerCadence = new String[totalSteps];
+        upperCadence = new String[totalSteps];
+        stepDetails = new String[totalSteps];
 
         if (cursor.moveToFirst()) {
             do {
