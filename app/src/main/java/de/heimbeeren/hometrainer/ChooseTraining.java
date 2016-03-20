@@ -172,16 +172,17 @@ public class ChooseTraining extends AppCompatActivity implements View.OnClickLis
                     lowerCadence[i], upperCadence[i], stepDetails[i]);
         }
 
-        slope = new int[] {-4,0,-1,0,-2,-1,-2,0,-1,1,-1,-2,-1,-2,-4};
-        stepTime = new String[] {"8","4","2","2","2","3","4","3","2","2","1","2","2","1","5"};
-        gearFront = new int[] {2,3,2,3,2,2,2,2,2,2,2,2,2,3,2};
-        gearBack = new int[] {2,3,5,3,7,2,7,3,7,3,7,6,3,3,2};
-        lowerCadence = new String[] {"95","80","90","90","80","110","80","110","80","110","90","","80","80","90"};
-        upperCadence = new String[] {"+","+","+","+","+","","90","","90","","90","","","100","100"};
-        stepDetails = new String[] {"Aufwärmen!", "2 * 1 Min. 40 - 45 km/h und LOCKER!", "30 - 35 km/h",
-                "2 * 1 Min. 40 - 45 km/h und LOCKER!","30 - 33 km/h", "Hohe Geschwindigkeit", "Locker pedalieren", "Hohe Geschwindigkeit",
-                "Locker pedalieren", "Hohe Geschwindigkeit", "Locker pedalieren", "3 * 30 Sek. Gas geben und 30 sek. ruhen",
-                "3 * 30 sek. nur linkes Bein und 30 Sek. nur rechtes Bein", "Locker pedalieren", "Abkühlphase"};
+        slope = new int[] {-4,0,0,0,0,-1,0,0,0,0,-2,-1,-2,0,-1,1,-1,-2,-2,-2,-1,-1,-1,-2,-4};
+        stepTime = new String[] {"8","1","1","1","1","2","2","2","2","2","2","3","4","3","2","2","1","1","1","1","2","2","2","1","5"};
+        gearFront = new int[] {2,3,3,3,3,2,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,3,2};
+        gearBack = new int[] {3,4,4,4,4,6,6,6,6,4,7,3,7,4,7,4,7,6,6,6,4,4,4,4,2};
+        lowerCadence = new String[] {"95","80","80","80","80","90","90","80","110","80","110","80","110","90","","80","80","80","80","80","80","80","80","80","90"};
+        upperCadence = new String[] {"+","+","+","+","+","+","+","+","","90","","90","","90","","","","","","","","","","100","100"};
+        stepDetails = new String[] {"Aufwärmen!", "40 - 45 km/h", "Locker!", "40 - 45 km/h", "Locker!", "30 - 35 km/h",
+                "40 - 45 km/h", "Locker!", "40 - 45 km/h", "Locker!", "30 - 33 km/h", "Hohe Geschwindigkeit", "Locker pedalieren", "Hohe Geschwindigkeit",
+                "Locker pedalieren", "Hohe Geschwindigkeit", "Locker pedalieren", "30 Sek. Gas geben und 30 sek. ruhen","30 Sek. Gas geben und 30 sek. ruhen",
+                "30 Sek. Gas geben und 30 sek. ruhen","30 sek. nur linkes Bein und 30 Sek. nur rechtes Bein","30 sek. nur linkes Bein und 30 Sek. nur rechtes Bein",
+                "30 sek. nur linkes Bein und 30 Sek. nur rechtes Bein", "Locker pedalieren", "Abkühlphase"};
 
         workoutPlanName = "Intervalltraining BRA3";
         for (int i= 0; i < slope.length; i++) {
